@@ -7,9 +7,10 @@ const ingresos = [
   new Ingreso("Venta coche", 1500),
 ];
 
-const egresos = [new Egreso("Renta deparamento", 900), new Egreso("Buses", 600)];
-
-
+const egresos = [
+  new Egreso("Renta deparamento", 900),
+  new Egreso("Buses", 600),
+];
 
 let cargarApp = () => {
   // ↑ funcion flecha que se encuentra en el body del index
@@ -17,7 +18,6 @@ let cargarApp = () => {
   // ↑ funcion para refrescar la informaciòn del cabecero
   cargarEgresos();
   cargarIngresos();
-
 };
 
 let totalIngresos = () => {
@@ -96,15 +96,17 @@ const cargarIngresos = () => {
   document.getElementById("lista-ingresos").innerHTML = ingresosHTML;
 };
 
-const crearIngresoHTML = (ingresoSt) => {
+const crearIngresoHTML = (ingreso) => {
   let ingresoHTML = `
 <div class="elemento limpiarEstilos">
-            <div class="elemento_descripcion">${ingresoSt.descripcion}</div>
+            <div class="elemento_descripcion">${ingreso.descripcion}</div>
             <div class="derecha limpiarEstilos">
-              <div class="elemento_valor">${formatoMoneda(ingresoSt.valor)}</div>
+              <div class="elemento_valor">${formatoMoneda(
+                ingreso.valor
+              )}</div>
               <div class="elemento_eliminar">
                 <button class="elemento_eliminar--btn">
-                  <ion-icon name="close-circle-outline"></ion-icon>
+                  <ion-icon name="close-circle-outline" onclick="eliminarIngreso(${ingreso.id})"></ion-icon>
                 </button>
               </div>
             </div>
@@ -113,32 +115,53 @@ const crearIngresoHTML = (ingresoSt) => {
   return ingresoHTML;
 };
 
+const eliminarIngreso = (id) =>{
+  let indiceEliminar = ingresos.findIndex(ingreso => ingreso.id === id);
+  ingresos.splice(indiceEliminar,1);
+  cargarCabecero();
+  cargarIngresos();
+}
+
 // -------------------------------------------------
 // Inicio f agreagar egresos dinamicamente
 // ----------------------------------------------------
 
 const cargarEgresos = () => {
-  let egresosHTML = '';
-  for (let egreso of egresos){
+  let egresosHTML = "";
+  // recorremos cada elemento
+  for (let egreso of egresos) {
     egresosHTML += crearEgresosHTML(egreso);
   }
   document.getElementById("lista-egresos").innerHTML = egresosHTML;
+};
 
-}
-
-const crearEgresosHTML = (egresoSt) => {
+const crearEgresosHTML = (egreso) => {
+  // var tics
   let egresosHTML = `
   <div class="elemento limpiarEstilos">
-  <div class="elemento_descripcion">${egresoSt.descripcion}</div>
+  <div class="elemento_descripcion">${egreso.descripcion}</div>
   <div class="derecha limpiarEstilos">
-    <div class="elemento_valor">${formatoMoneda(egresoSt.valor)}</div>
-    <div class="elemento_porcentaje">${formatoPorcentaje(egresoSt.valor/totalEgresos())}</div>
+    <div class="elemento_valor">${formatoMoneda(egreso.valor)}</div>
+    <div class="elemento_porcentaje">${formatoPorcentaje(
+      egreso.valor / totalEgresos()
+    )}</div>
     <div class="elemento_eliminar">
       <button class="elemento_eliminar--btn">
-        <ion-icon name="close-circle-outline"></ion-icon>
+        <ion-icon name="close-circle-outline" onclick="eliminarEgreso(${egreso.id})"></ion-icon>
       </button>
     </div>
   </div>
 </div>`;
-return egresosHTML;
+  return egresosHTML;
+  // cada objeto de tipo egreso retornamos
+};
+
+// metodo eliminar Ingreso
+let eliminarEgreso = (id) =>{
+  // findIndex se utiliza para encontrar el indice de un elemento
+let indiceEliminar = egresos.findIndex(egreso => egreso.id === id );
+egresos.splice(indiceEliminar, 1);
+// splice se utiliza para modificar un array o eliminar
+cargarCabecero();
+cargarEgresos();
 };
