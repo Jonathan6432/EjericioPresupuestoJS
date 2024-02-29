@@ -165,3 +165,29 @@ egresos.splice(indiceEliminar, 1);
 cargarCabecero();
 cargarEgresos();
 };
+
+let agregarDato = () => {
+  // recuperamos el fomulario "id"
+  let forma = document.forms['forma'];
+  // creamos una varible para recuperar cada valor agregado en el index
+  let tipo = forma['tipo'];
+  let descripcion = forma['descripcion'];
+  let valor = forma['valor'];
+  // Antes de procesar un elemento validamos que los valores son diferentes de nulo
+  if (descripcion.value !== '' && valor.value !== ''){
+    if (tipo.value === 'ingreso') {
+      // si el valor es ingreso se agrega al arreglo
+      ingresos.push(new Ingreso(descripcion.value,+valor.value ));
+      // +valor.value = se convierte el valor en numerico
+      cargarCabecero();
+      cargarIngresos();
+      
+  }else if(tipo.value === 'egreso') {
+    egresos.push (new Egreso(descripcion.value, +valor.value));
+    cargarCabecero();
+    cargarEgresos();
+
+  }
+}
+
+}
